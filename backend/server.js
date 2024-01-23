@@ -104,27 +104,4 @@ client.connect((err) => {
   });
 });
 
-//stripe
-const stripe = require("stripe")(process.env.SECRET_KEY);
-const YOUR_DOMAIN = "http://localhost:3000";
 
-routes.post("/create-checkout-session", jsonParser, async (req, res) => {
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: req.body,
-      mode: "payment",
-      success_url: `${YOUR_DOMAIN}/success`,
-      cancel_url: `${YOUR_DOMAIN}/cancel`,
-    });
-
-    res.json({ id: session.id });
-  } catch (err) {
-    return res.status(500).send(`failed to process payment ${err}`);
-  }
-});
-
-//routes
-routes.get("/", (req, res) => {
-  res.send("Hello World!");
-});
